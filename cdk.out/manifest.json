@@ -1,0 +1,227 @@
+{
+  "version": "13.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "test-stack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/eu-central-1",
+      "properties": {
+        "templateFile": "test-stack.template.json",
+        "validateOnSynth": false
+      },
+      "metadata": {
+        "/test-stack": [
+          {
+            "type": "aws:cdk:asset",
+            "data": {
+              "path": "asset.092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a",
+              "id": "092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a",
+              "packaging": "zip",
+              "sourceHash": "092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a",
+              "s3BucketParameter": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3Bucket1819B99A",
+              "s3KeyParameter": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3VersionKeyCFD7E192",
+              "artifactHashParameter": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aArtifactHash38F6F1DF"
+            },
+            "trace": [
+              "ConstructNode.addMetadata (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/construct-compat.js:405:62)",
+              "LegacyStackSynthesizer.doAddFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:175:29)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:83:25)",
+              "Stack.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack.js:425:33)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:87:31)",
+              "new Asset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:44)",
+              "AssetCode.bind (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/code.js:258:26)",
+              "new Function (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function.js:97:33)",
+              "SingletonFunction.ensureLambda (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:109:16)",
+              "new SingletonFunction (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:26:36)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:12:29)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/test/scanCR/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "testscanCR2A4AFD17",
+            "trace": [
+              "new CustomResource (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/custom-resource.js:30:25)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:27:30)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/SingletonLambdastaticuuid/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambdastaticuuidServiceRole16D8DC1F",
+            "trace": [
+              "new Role (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-iam/lib/role.js:72:22)",
+              "new Function (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function.js:79:35)",
+              "SingletonFunction.ensureLambda (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:109:16)",
+              "new SingletonFunction (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:26:36)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:12:29)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/SingletonLambdastaticuuid/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambdastaticuuidServiceRoleDefaultPolicy3C83BBE0",
+            "trace": [
+              "new Policy (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-iam/lib/policy.js:56:26)",
+              "Role.addToPrincipalPolicy (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-iam/lib/role.js:209:34)",
+              "SingletonFunction.addToRolePolicy (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function-base.js:60:19)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:23:27)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/SingletonLambdastaticuuid/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SingletonLambdastaticuuidBC0BFD9E",
+            "trace": [
+              "new Function (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function.js:135:26)",
+              "SingletonFunction.ensureLambda (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:109:16)",
+              "new SingletonFunction (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:26:36)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:12:29)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/AssetParameters/092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a/S3Bucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3Bucket1819B99A",
+            "trace": [
+              "new FileAssetParameters (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/asset-parameters.js:12:36)",
+              "LegacyStackSynthesizer.doAddFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:162:22)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:83:25)",
+              "Stack.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack.js:425:33)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:87:31)",
+              "new Asset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:44)",
+              "AssetCode.bind (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/code.js:258:26)",
+              "new Function (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function.js:97:33)",
+              "SingletonFunction.ensureLambda (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:109:16)",
+              "new SingletonFunction (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:26:36)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:12:29)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/AssetParameters/092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a/S3VersionKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3VersionKeyCFD7E192",
+            "trace": [
+              "new FileAssetParameters (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/asset-parameters.js:16:35)",
+              "LegacyStackSynthesizer.doAddFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:162:22)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:83:25)",
+              "Stack.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack.js:425:33)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:87:31)",
+              "new Asset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:44)",
+              "AssetCode.bind (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/code.js:258:26)",
+              "new Function (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function.js:97:33)",
+              "SingletonFunction.ensureLambda (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:109:16)",
+              "new SingletonFunction (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:26:36)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:12:29)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/AssetParameters/092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a/ArtifactHash": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aArtifactHash38F6F1DF",
+            "trace": [
+              "new FileAssetParameters (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/asset-parameters.js:20:38)",
+              "LegacyStackSynthesizer.doAddFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:162:22)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:83:25)",
+              "Stack.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack.js:425:33)",
+              "LegacyStackSynthesizer.addFileAsset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stack-synthesizers/legacy.js:87:31)",
+              "new Asset (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-s3-assets/lib/asset.js:40:44)",
+              "AssetCode.bind (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/code.js:258:26)",
+              "new Function (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/function.js:97:33)",
+              "SingletonFunction.ensureLambda (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:109:16)",
+              "new SingletonFunction (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/aws-lambda/lib/singleton-lambda.js:26:36)",
+              "new EcrAssetScanner (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/index.js:12:29)",
+              "Object.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/lib/integ.default.js:11:1)",
+              "Module._compile (internal/modules/cjs/loader.js:1063:30)",
+              "Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)",
+              "Module.load (internal/modules/cjs/loader.js:928:32)",
+              "Function.Module._load (internal/modules/cjs/loader.js:769:14)",
+              "Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)",
+              "internal/main/run_main_module.js:17:47"
+            ]
+          }
+        ],
+        "/test-stack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata",
+            "trace": [
+              "new MetadataResource (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/metadata-resource.js:22:30)",
+              "/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/synthesis.js:139:9",
+              "visit (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/synthesis.js:200:9)",
+              "visit (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/synthesis.js:197:9)",
+              "injectMetadataResources (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/synthesis.js:128:5)",
+              "Object.synthesize (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/private/synthesis.js:17:5)",
+              "App.synth (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/stage.js:100:41)",
+              "process.<anonymous> (/Users/gbvanrenswoude/projects/cdk-ecr-asset-scanner/node_modules/@aws-cdk/core/lib/app.js:51:51)",
+              "Object.onceWrapper (events.js:422:26)",
+              "process.emit (events.js:315:20)"
+            ]
+          }
+        ]
+      },
+      "displayName": "test-stack"
+    }
+  }
+}

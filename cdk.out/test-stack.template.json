@@ -1,0 +1,171 @@
+{
+  "Resources": {
+    "testscanCR2A4AFD17": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdastaticuuidBC0BFD9E",
+            "Arn"
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "test-stack/test/scanCR/Default"
+      }
+    },
+    "SingletonLambdastaticuuidServiceRole16D8DC1F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-stack/SingletonLambdastaticuuid/ServiceRole/Resource"
+      }
+    },
+    "SingletonLambdastaticuuidServiceRoleDefaultPolicy3C83BBE0": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:*",
+                "logs:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SingletonLambdastaticuuidServiceRoleDefaultPolicy3C83BBE0",
+        "Roles": [
+          {
+            "Ref": "SingletonLambdastaticuuidServiceRole16D8DC1F"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-stack/SingletonLambdastaticuuid/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "SingletonLambdastaticuuidBC0BFD9E": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3Bucket1819B99A"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3VersionKeyCFD7E192"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3VersionKeyCFD7E192"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "SingletonLambdastaticuuidServiceRole16D8DC1F",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "T": "pog",
+            "N": "u",
+            "C": "NEVER"
+          }
+        },
+        "Handler": "index.handler",
+        "Runtime": "python3.8"
+      },
+      "DependsOn": [
+        "SingletonLambdastaticuuidServiceRoleDefaultPolicy3C83BBE0",
+        "SingletonLambdastaticuuidServiceRole16D8DC1F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "test-stack/SingletonLambdastaticuuid/Resource",
+        "aws:asset:path": "asset.092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a",
+        "aws:asset:property": "Code"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAAEz2PwY7CMAxEv4V76m4E4rxQac+o+wUmNSi0iaXYWYSq/Dtpq+U0zxp7RrZg7RG+dt/4lMYNYzs7TgTzr6IbTcdRNGWnpsuiHHoSzsmR6W7xwycR0rp/9/G+GBdMGEgpFbOEzhOG64A1svoTKcefHJ16juYD9eqfi/EYYO552loWvfDk3WvNXqkY2Te41Aqs7XWGc3Yj6RmFSjGRB4KHtH/2APU/u3uI903KUX0g6Dd9A8V1rqH8AAAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-stack/CDKMetadata/Default"
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3Bucket1819B99A": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a\""
+    },
+    "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aS3VersionKeyCFD7E192": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a\""
+    },
+    "AssetParameters092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0aArtifactHash38F6F1DF": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"092675a071f819169085b027cc55a0e0467b57ac842ac79abe97fa117a677a0a\""
+    }
+  }
+}
