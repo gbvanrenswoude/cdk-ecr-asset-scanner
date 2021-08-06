@@ -10,8 +10,10 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/core',
     '@aws-cdk/aws-iam',
     '@aws-cdk/aws-lambda',
-    '@aws-cdk/aws-ecr-assets'
+    '@aws-cdk/aws-ecr-assets',
+    '@aws-cdk/aws-ecs'
   ],
+  gitignore: ['cdk.out'],
   python: {
     distName: 'cdk-ecr-asset-scanner',
     module: 'cdk-ecr-asset-scanner',

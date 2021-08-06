@@ -5,125 +5,134 @@ Environment variables:
 
 
 TODO use cfnresponse, parse input CR await scan parse output scan reply and send to TEAMS
+
+{
+  "RequestType": "Create",
+  "ResponseURL": "http://pre-signed-S3-url-for-response",
+  "StackId": "arn:aws:cloudformation:eu-central-1:123456789012:stack/MyStack/guid",
+  "RequestId": "unique id for this create request",
+  "ResourceType": "Custom::TestResource",
+  "LogicalResourceId": "MyTestResource",
+  "ResourceProperties": {
+    "StackName": "MyStack",
+    "List": [
+      "1",
+      "2",
+      "3"
+    ]
+  }
+}
+
 """
 
 from datetime import datetime
 from logging import getLogger, INFO
-from urllib.request import Request, urlopen
-from urllib.error import URLError, HTTPError
 import json
-import os
-from botocore.exceptions import ClientError
+import sys
 import boto3
+import asyncio
+import urllib3
+
+http = urllib3.PoolManager()
+
 
 logger = getLogger()
 logger.setLevel(INFO)
 
-
-def get_properties(finding_counts):
-    """Returns the color setting of severity"""
-    if finding_counts['CRITICAL'] != 0:
-        properties = {'color': 'danger', 'icon': ':red_circle:'}
-    elif finding_counts['HIGH'] != 0:
-        properties = {'color': 'warning', 'icon': ':large_orange_diamond:'}
-    else:
-        properties = {'color': 'good', 'icon': ':green_heart:'}
-    return properties
+# Use urllib3 to send a response to CloudFormation. This way no dependencies need to be packaged
 
 
-def get_params(scan_result):
-    """Slack message formatting"""
-    region = os.environ['AWS_DEFAULT_REGION']
-    channel = os.environ['CHANNEL']
-    severity_list = ['CRITICAL', 'HIGH',
-                     'MEDIUM', 'LOW', 'INFORMAL', 'UNDEFINED']
-    finding_counts = scan_result['imageScanFindingsSummary']['findingSeverityCounts']
+def send(event, context, responseStatus, responseData, physicalResourceId=None, noEcho=False, reason=None):
+    responseUrl = event['ResponseURL']
 
-    for severity in severity_list:
-        finding_counts.setdefault(severity, 0)
+    print(responseUrl)
 
-    message = f"*ECR Image Scan findings | {region} | Account:{scan_result['registryId']}*"
-    description = scan_result['imageScanStatus']['description']
-    text_properties = get_properties(finding_counts)
-
-    complete_at = datetime.strftime(
-        scan_result['imageScanFindingsSummary']['imageScanCompletedAt'],
-        '%Y-%m-%d %H:%M:%S %Z'
-    )
-    source_update_at = datetime.strftime(
-        scan_result['imageScanFindingsSummary']['vulnerabilitySourceUpdatedAt'],
-        '%Y-%m-%d %H:%M:%S %Z'
-    )
-
-    slack_message = {
-        'username': 'Amazon ECR',
-        'channels': channel,
-        'icon_emoji': ':ecr:',
-        'text': message,
-        'attachments': [
-            {
-                'fallback': 'AmazonECR Image Scan Findings Description.',
-                'color': text_properties['color'],
-                'title': f'''{text_properties['icon']} {
-                    scan_result['repositoryName']}:{
-                    scan_result['imageTags'][0]}''',
-                'title_link': f'''https://console.aws.amazon.com/ecr/repositories/{
-                    scan_result['repositoryName']}/image/{
-                    scan_result['imageDigest']}/scan-results?region={region}''',
-                'text': f'''{description}\nImage Scan Completed at {
-                    complete_at}\nVulnerability Source Updated at {source_update_at}''',
-                'fields': [
-                    {'title': 'Critical',
-                        'value': finding_counts['CRITICAL'], 'short': True},
-                    {'title': 'High',
-                        'value': finding_counts['HIGH'], 'short': True},
-                    {'title': 'Medium',
-                        'value': finding_counts['MEDIUM'], 'short': True},
-                    {'title': 'Low',
-                        'value': finding_counts['LOW'], 'short': True},
-                    {'title': 'Informational',
-                        'value': finding_counts['INFORMAL'], 'short': True},
-                    {'title': 'Undefined',
-                        'value': finding_counts['UNDEFINED'], 'short': True},
-                ]
-            }
-        ]
+    responseBody = {
+        'Status': responseStatus,
+        'Reason': reason or "See the details in CloudWatch Log Stream: {}".format(context.log_stream_name),
+        'PhysicalResourceId': physicalResourceId or context.log_stream_name,
+        'StackId': event['StackId'],
+        'RequestId': event['RequestId'],
+        'LogicalResourceId': event['LogicalResourceId'],
+        'NoEcho': noEcho,
+        'Data': responseData
     }
-    return slack_message
 
+    json_responseBody = json.dumps(responseBody)
 
-def get_findings(detail):
-    """Returns the image scan findings summary"""
-    ecr = boto3.client('ecr')
+    print("Response body:")
+    print(json_responseBody)
+
+    headers = {
+        'content-type': '',
+        'content-length': str(len(json_responseBody))
+    }
+
     try:
-        response = ecr.describe_images(
-            repositoryName=detail['repository-name'],
-            imageIds=[
-                {'imageDigest': detail['image-digest']}
-            ]
+        response = http.request(
+            'PUT', responseUrl, headers=headers, body=json_responseBody)
+        print("Status code:", response.status)
+
+    except Exception as e:
+        print("send(..) failed executing http.request(..):", e)
+
+
+async def waiter(event, context):
+    """
+    Prevent Lambda runtime limitation to cock up waiting for scans.
+    We could wait using polling (CW Events), but 99,999.... scans are complete within 15 minutes.
+    Which would needlessly make this 
+    """
+    await asyncio.sleep(870)
+    send(event, context, 'SUCCESS', {
+        'scan_result': 'todo generate ecr url',
+        'scan_result_ecr': 'todo generate ecr url'
+    })
+    sys.exit()
+
+
+def handler(event, context):
+    if event['RequestType'] == 'Delete':
+        # When deleting, we can just return a success
+        send(event, context, 'SUCCESS', {
+            'scan_result': 'no scan result for delete op',
+            'scan_result_ecr': 'no scan result for delete op'
+        })
+    else:
+        # An update or create is done on the parameter for the asset. Rescan and return this result
+        send(event, context, 'SUCCESS', {})
+
+
+async def get_scan_results(registry_id, repository_name, image_digest, image_tag):
+    client = boto3.client('ecr')
+    finding_list = []
+    response = client.describe_image_scan_findings(
+        registryId=registry_id,
+        repositoryName=repository_name,
+        imageId={
+            'imageDigest': image_digest,
+            'imageTag': image_tag
+        },
+        maxResults=1000
+    )
+    while response['imageScanStatus']['status'] == 'IN_PROGRESS':
+        await asyncio.sleep(30)
+        await get_scan_results(registry_id, repository_name, image_digest, image_tag)
+    finding_list.append(response['imageScanFindings']['findings'])
+    while "nextToken" in response:
+        response = client.describe_image_scan_findings(
+            registryId=registry_id,
+            repositoryName=repository_name,
+            imageId={
+                'imageDigest': image_digest,
+                'imageTag': image_tag
+            },
+            maxResults=1000,
+            nextToken=response["nextToken"]
         )
-    except ClientError as err:
-        logger.error("Request failed: %s", err.response['Error']['Message'])
-    else:
-        return response['imageDetails'][0]
-
-
-def lambda_handler(event, context):
-    """AWS Lambda Function to send ECR Image Scan Findings to Slack"""
-    response = 1
-    scan_result = get_findings(event['detail'])
-    slack_message = get_params(scan_result)
-    req = Request(os.environ['WEBHOOK_URL'],
-                  json.dumps(slack_message).encode('utf-8'))
-    try:
-        with urlopen(req) as res:
-            res.read()
-            logger.info("Message posted.")
-    except HTTPError as err:
-        logger.error("Request failed: %d %s", err.code, err.reason)
-    except URLError as err:
-        logger.error("Server connection failed: %s", err.reason)
-    else:
-        response = 0
-
-    return response
+        finding_list.append(response['imageScanFindings']['findings'])
+    return {
+        'findings': finding_list,
+        'scan_results': response['imageScanFindings']['findingSeverityCounts'],
+        'scan_age': response['imageScanFindings']['imageScanCompletedAt']
+    }
