@@ -26,13 +26,13 @@ export class TestStack extends cdk.Stack {
     const image2 = ecs.ContainerImage.fromAsset("./src/");
 
     // Image 3 with scan
-    const image3 = new ScannedDockerImageAsset(this, "whaa", {
+    const image3 = new ScannedDockerImageAsset(this, "firsttest", {
       directory: path.join(__dirname, "../src/"),
     });
     const image31 = ecs.ContainerImage.fromDockerImageAsset(image3);
     // Image 4 with scan
-    const image4 = new ScannedDockerImageAsset(this, "whaas", {
-      directory: path.join(__dirname, "../src/"),
+    const image4 = new ScannedDockerImageAsset(this, "secondtest", {
+      directory: path.join(__dirname, "../src/temp/"),
     });
     const image41 = ecs.ContainerImage.fromDockerImageAsset(image4);
 
