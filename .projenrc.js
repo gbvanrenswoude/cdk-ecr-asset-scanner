@@ -13,7 +13,7 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/aws-ecr-assets',
     '@aws-cdk/aws-ecs'
   ],
-  gitignore: ['cdk.out'],
+  gitignore: ['cdk.out', 'testss.py'],
   python: {
     distName: 'cdk-ecr-asset-scanner',
     module: 'cdk-ecr-asset-scanner',

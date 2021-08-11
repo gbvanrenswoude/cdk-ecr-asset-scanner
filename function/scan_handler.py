@@ -34,7 +34,7 @@ import asyncio
 import urllib3
 
 http = urllib3.PoolManager()
-
+client = boto3.client('ecr')
 
 logger = getLogger()
 logger.setLevel(INFO)
@@ -70,7 +70,7 @@ def send(event, context, responseStatus, responseData, physicalResourceId='stati
         logger.error("send(..) failed executing http.request(..):", e)
 
 
-async def waiter(event, context):
+async def waiter(event, context, target):
     """
     Prevent Lambda runtime limitation to cock up waiting for scans.
     We could wait using polling (CW Events), but 99,999.... scans are complete within 15 minutes.
@@ -78,14 +78,12 @@ async def waiter(event, context):
     """
     await asyncio.sleep(870)
     send(event, context, 'SUCCESS', {
-        'scan_result': 'todo generate ecr url',
-        'scan_result_ecr': 'todo generate ecr url'
+        'report': f'Timed out waiting for scan to finish... Continuing deployment. Check scan results here: {target}',
     })
     sys.exit()
 
 
 async def await_scan_results(registry_id, repository_name, image_digest, image_tag):
-    client = boto3.client('ecr')
     finding_list = []
     response = client.describe_image_scan_findings(
         registryId=registry_id,
@@ -119,6 +117,19 @@ async def await_scan_results(registry_id, repository_name, image_digest, image_t
     }
 
 
+def get_image_digest(registry_id, repository_name, image_tag):
+    response = client.describe_images(
+        registryId=registry_id,
+        repositoryName=repository_name,
+        imageIds=[
+            {
+                'imageTag': image_tag
+            },
+        ]
+    )
+    return response['imageDetails'][0]['imageDigest']
+
+
 async def handler(event, context):
     if event['RequestType'] == 'Delete':
         send(event, context, 'SUCCESS', {
@@ -126,10 +137,20 @@ async def handler(event, context):
         })
     else:
         target = event['ResourceProperties']['target']
+        asyncio.create_task(waiter(event, context, target))
         logger.info(f'Got CDK DockerImageAsset target: {target}')
-        # parse the imageUri
-        response = await_scan_results()
-        # calculate a comprehensive count based on the finding severity
+        b = target.split('/', 1)
+        full_container_id = b[1].split(':', 1)
+        container_name = full_container_id[0]
+        container_tag = full_container_id[1]
+        registry = target[0:12]
+        logger.info(
+            f'Parsed container target to: name: {container_name}, tag: {container_tag}, registry: {registry}')
+        image_digest = get_image_digest(
+            registry, container_name, container_tag)
+        response = await_scan_results(
+            registry, container_name, image_digest, container_tag)
+        # TODO calculate a comprehensive count based on the finding severity and add that to the response send in report
         send(event, context, 'SUCCESS', {
             'report': json.dumps(response['scan_results'])
         })
