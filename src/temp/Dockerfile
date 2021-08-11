@@ -1,2 +1,2 @@
 from docker:stable
-RUN apk install jq
+RUN apk add jq
