@@ -1,6 +1,7 @@
 import * as cdk from "@aws-cdk/core";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as iam from "@aws-cdk/aws-iam";
+import * as logs from "@aws-cdk/aws-logs";
 import {
   DockerImageAsset,
   DockerImageAssetProps,
@@ -28,6 +29,7 @@ export class ScannedDockerImageAsset extends DockerImageAsset {
       runtime: lambda.Runtime.PYTHON_3_8,
       code: lambda.Code.fromAsset(path.join(__dirname, "../function")),
       handler: "index.handler",
+      logRetention: logs.RetentionDays.ONE_DAY,
     });
     this.scanFunction.addToRolePolicy(
       new iam.PolicyStatement({

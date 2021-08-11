@@ -39,13 +39,9 @@ http = urllib3.PoolManager()
 logger = getLogger()
 logger.setLevel(INFO)
 
-# Use urllib3 to send a response to CloudFormation. This way no dependencies need to be packaged
 
-
-def send(event, context, responseStatus, responseData, physicalResourceId=None, noEcho=False, reason=None):
+def send(event, context, responseStatus, responseData, physicalResourceId='static_override', noEcho=False, reason=None):
     responseUrl = event['ResponseURL']
-
-    print(responseUrl)
 
     responseBody = {
         'Status': responseStatus,
@@ -60,9 +56,6 @@ def send(event, context, responseStatus, responseData, physicalResourceId=None, 
 
     json_responseBody = json.dumps(responseBody)
 
-    print("Response body:")
-    print(json_responseBody)
-
     headers = {
         'content-type': '',
         'content-length': str(len(json_responseBody))
@@ -71,17 +64,17 @@ def send(event, context, responseStatus, responseData, physicalResourceId=None, 
     try:
         response = http.request(
             'PUT', responseUrl, headers=headers, body=json_responseBody)
-        print("Status code:", response.status)
+        logger.info("Status code:", response.status)
 
     except Exception as e:
-        print("send(..) failed executing http.request(..):", e)
+        logger.error("send(..) failed executing http.request(..):", e)
 
 
 async def waiter(event, context):
     """
     Prevent Lambda runtime limitation to cock up waiting for scans.
     We could wait using polling (CW Events), but 99,999.... scans are complete within 15 minutes.
-    Which would needlessly make this 
+    Which would needlessly make this overcomplicated if we'd opt to choose polling
     """
     await asyncio.sleep(870)
     send(event, context, 'SUCCESS', {
@@ -91,19 +84,7 @@ async def waiter(event, context):
     sys.exit()
 
 
-def handler(event, context):
-    if event['RequestType'] == 'Delete':
-        # When deleting, we can just return a success
-        send(event, context, 'SUCCESS', {
-            'scan_result': 'no scan result for delete op',
-            'scan_result_ecr': 'no scan result for delete op'
-        })
-    else:
-        # An update or create is done on the parameter for the asset. Rescan and return this result
-        send(event, context, 'SUCCESS', {})
-
-
-async def get_scan_results(registry_id, repository_name, image_digest, image_tag):
+async def await_scan_results(registry_id, repository_name, image_digest, image_tag):
     client = boto3.client('ecr')
     finding_list = []
     response = client.describe_image_scan_findings(
@@ -117,7 +98,7 @@ async def get_scan_results(registry_id, repository_name, image_digest, image_tag
     )
     while response['imageScanStatus']['status'] == 'IN_PROGRESS':
         await asyncio.sleep(30)
-        await get_scan_results(registry_id, repository_name, image_digest, image_tag)
+        await await_scan_results(registry_id, repository_name, image_digest, image_tag)
     finding_list.append(response['imageScanFindings']['findings'])
     while "nextToken" in response:
         response = client.describe_image_scan_findings(
@@ -136,3 +117,19 @@ async def get_scan_results(registry_id, repository_name, image_digest, image_tag
         'scan_results': response['imageScanFindings']['findingSeverityCounts'],
         'scan_age': response['imageScanFindings']['imageScanCompletedAt']
     }
+
+
+async def handler(event, context):
+    if event['RequestType'] == 'Delete':
+        send(event, context, 'SUCCESS', {
+            'report': 'no scan result for delete op'
+        })
+    else:
+        target = event['ResourceProperties']['target']
+        logger.info(f'Got CDK DockerImageAsset target: {target}')
+        # parse the imageUri
+        response = await_scan_results()
+        # calculate a comprehensive count based on the finding severity
+        send(event, context, 'SUCCESS', {
+            'report': json.dumps(response['scan_results'])
+        })
