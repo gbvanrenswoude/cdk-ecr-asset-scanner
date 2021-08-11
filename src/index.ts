@@ -28,7 +28,7 @@ export class ScannedDockerImageAsset extends DockerImageAsset {
       uuid: "staticuuidforscanningdockerimageassets2e92278ruwu0qu209u",
       runtime: lambda.Runtime.PYTHON_3_8,
       code: lambda.Code.fromAsset(path.join(__dirname, "../function")),
-      handler: "index.handler",
+      handler: "scan_handler.main",
       logRetention: logs.RetentionDays.ONE_DAY,
     });
     this.scanFunction.addToRolePolicy(

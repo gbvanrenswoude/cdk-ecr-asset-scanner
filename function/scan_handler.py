@@ -1,31 +1,3 @@
-"""
-Environment variables:
-    CHANNEL: Slack channel name
-    WEBHOOK_URL: Incoming Webhook URL
-
-
-TODO use cfnresponse, parse input CR await scan parse output scan reply and send to TEAMS
-
-{
-  "RequestType": "Create",
-  "ResponseURL": "http://pre-signed-S3-url-for-response",
-  "StackId": "arn:aws:cloudformation:eu-central-1:123456789012:stack/MyStack/guid",
-  "RequestId": "unique id for this create request",
-  "ResourceType": "Custom::TestResource",
-  "LogicalResourceId": "MyTestResource",
-  "ResourceProperties": {
-    "StackName": "MyStack",
-    "List": [
-      "1",
-      "2",
-      "3"
-    ]
-  }
-}
-
-"""
-
-from datetime import datetime
 from logging import getLogger, INFO
 import json
 import sys
@@ -78,7 +50,7 @@ async def waiter(event, context, target):
     """
     await asyncio.sleep(870)
     send(event, context, 'SUCCESS', {
-        'report': f'Timed out waiting for scan to finish... Continuing deployment. Check scan results here: {target}',
+        'report': f'Timed out waiting for scan to finish... Continuing deployment. Check scan results when done here: {target}',
     })
     sys.exit()
 
@@ -136,21 +108,31 @@ async def handler(event, context):
             'report': 'no scan result for delete op'
         })
     else:
-        target = event['ResourceProperties']['target']
-        asyncio.create_task(waiter(event, context, target))
-        logger.info(f'Got CDK DockerImageAsset target: {target}')
-        b = target.split('/', 1)
-        full_container_id = b[1].split(':', 1)
-        container_name = full_container_id[0]
-        container_tag = full_container_id[1]
-        registry = target[0:12]
-        logger.info(
-            f'Parsed container target to: name: {container_name}, tag: {container_tag}, registry: {registry}')
-        image_digest = get_image_digest(
-            registry, container_name, container_tag)
-        response = await_scan_results(
-            registry, container_name, image_digest, container_tag)
-        # TODO calculate a comprehensive count based on the finding severity and add that to the response send in report
-        send(event, context, 'SUCCESS', {
-            'report': json.dumps(response['scan_results'])
-        })
+        try:
+            target = event['ResourceProperties']['target']
+            asyncio.create_task(waiter(event, context, target))
+            logger.info(f'Got CDK DockerImageAsset target: {target}')
+            b = target.split('/', 1)
+            full_container_id = b[1].split(':', 1)
+            container_name = full_container_id[0]
+            container_tag = full_container_id[1]
+            registry = target[0:12]
+            logger.info(
+                f'Parsed container target to: name: {container_name}, tag: {container_tag}, registry: {registry}')
+            image_digest = get_image_digest(
+                registry, container_name, container_tag)
+            response = await await_scan_results(
+                registry, container_name, image_digest, container_tag)
+            # TODO calculate a comprehensive count based on the finding severity and add that to the response send in report
+            send(event, context, 'SUCCESS', {
+                'report': json.dumps(response['scan_results'])
+            })
+        except Exception as e:
+            logger.error("Generic Error caught: ", e)
+            send(event, context, 'SUCCESS', {
+                'report': f'CR Handler failed to run, inspect the logs at {context.log_stream_name}',
+            })
+
+
+def main(event, context):
+    asyncio.run(handler(event, context))

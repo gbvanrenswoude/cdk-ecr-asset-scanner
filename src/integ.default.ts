@@ -83,7 +83,7 @@ export class TestStack extends cdk.Stack {
     });
   }
 }
-new TestStack(app, "test-stack", { env });
+new TestStack(app, "scantesten-stack", { env });
 
 // const stack = new TestStack(app, "test-stack", { env });
 
