@@ -15,8 +15,7 @@ export class TestStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Drop in some Docker Image Asset
-    // FIXME type warnings in .fromDockerImageAsset()
+    // Docker Image Asset
     const image = new DockerImageAsset(this, "whoo", {
       directory: path.join(__dirname, "../src/"),
     });
@@ -83,13 +82,4 @@ export class TestStack extends cdk.Stack {
     });
   }
 }
-new TestStack(app, "scantesten-stack", { env });
-
-// const stack = new TestStack(app, "test-stack", { env });
-
-// Testing outside block scope
-// new EcrAssetScanner(stack, "test", {
-//   assetParameter: "pog",
-//   assetName: "u",
-//   severity: "NEVER",
-// });
+new TestStack(app, "scantest-stack", { env });

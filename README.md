@@ -1,10 +1,22 @@
 # CDK ECR Asset Scanner
 
-```sh
-cdk --app lib/integ.default.js synth
-```
+The CDK ECR Asset Scanner is a custom L3 `ScannedDockerImageAsset` construct that builds and uploads your container image assets to ECR. After pushing, it will return the vulnerability report status in a Stack Output. In that way, it gives crucial and important security related information directly back to the engineer working with the stack. It aims to improve security insight while working with AWS CDK.
+
+As stated before, `ScannedDockerImageAsset` is a custom L3 construct in the AWS Construct Library that combines the following L2 Constructs:
+
+- DockerImageAsset
+- A Custom Resource backed by a Lambda function
+- Stack outputs
+
+Because it just combines existing Constructs, this means the `ScannedDockerImageAsset` is a very stable L3 construct, not deemed experimental.
+
+![Terminal](./docs/assets/terminal_output.png)
 
 ## USAGE
+
+Just add the `ScannedDockerImageAsset` to your imports, and use it exactly like you would a normal `DockerImageAsset`. It will do all the heavy lifting under the hood by itself.
+
+Example (ts):
 
 ```ts
 import { ScannedDockerImageAsset } from "./index";
@@ -53,3 +65,8 @@ export class TestStack extends cdk.Stack {
 }
 new TestStack(app, "hh-stack", { env });
 ```
+
+## Availability
+
+- Typescript / JS
+- Python

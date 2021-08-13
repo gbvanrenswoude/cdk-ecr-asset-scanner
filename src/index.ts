@@ -30,6 +30,7 @@ export class ScannedDockerImageAsset extends DockerImageAsset {
       code: lambda.Code.fromAsset(path.join(__dirname, "../function")),
       handler: "scan_handler.main",
       logRetention: logs.RetentionDays.ONE_DAY,
+      timeout: cdk.Duration.seconds(890),
     });
     this.scanFunction.addToRolePolicy(
       new iam.PolicyStatement({
