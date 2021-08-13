@@ -56,6 +56,7 @@ async def waiter(event, context, target):
 
 
 async def await_scan_results(registry_id, repository_name, image_digest, image_tag):
+    await asyncio.sleep(2)
     finding_list = []
     response = client.describe_image_scan_findings(
         registryId=registry_id,
@@ -68,8 +69,8 @@ async def await_scan_results(registry_id, repository_name, image_digest, image_t
     )
     logger.info('Found scan entry.')
     while response['imageScanStatus']['status'] == 'IN_PROGRESS':
-        await asyncio.sleep(10)
         logger.info('Scan end result is still pending... Retrying in 10s.')
+        await asyncio.sleep(10)
         await await_scan_results(registry_id, repository_name, image_digest, image_tag)
     finding_list.append(response['imageScanFindings']['findings'])
     while "nextToken" in response:
@@ -113,6 +114,7 @@ async def handler(event, context):
     else:
         try:
             target = event['ResourceProperties']['target']
+            # await waiter(event, context, target)
             asyncio.create_task(waiter(event, context, target))
             logger.info(f'Got CDK DockerImageAsset target: {target}')
             b = target.split('/', 1)
