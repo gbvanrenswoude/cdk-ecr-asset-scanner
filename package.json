@@ -33,7 +33,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.117.0",
+    "@aws-cdk/assert": "^1.118.0",
     "@types/jest": "^26.0.24",
     "@types/node": "^10.17.0",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
@@ -56,21 +56,21 @@
     "typescript": "^4.3.5"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-ecr-assets": "^1.117.0",
-    "@aws-cdk/aws-ecs": "^1.117.0",
-    "@aws-cdk/aws-iam": "^1.117.0",
-    "@aws-cdk/aws-lambda": "^1.117.0",
-    "@aws-cdk/aws-logs": "^1.117.0",
-    "@aws-cdk/core": "^1.117.0",
+    "@aws-cdk/aws-ecr-assets": "^1.118.0",
+    "@aws-cdk/aws-ecs": "^1.118.0",
+    "@aws-cdk/aws-iam": "^1.118.0",
+    "@aws-cdk/aws-lambda": "^1.118.0",
+    "@aws-cdk/aws-logs": "^1.118.0",
+    "@aws-cdk/core": "^1.118.0",
     "constructs": "^3.2.27"
   },
   "dependencies": {
-    "@aws-cdk/aws-ecr-assets": "^1.117.0",
-    "@aws-cdk/aws-ecs": "^1.117.0",
-    "@aws-cdk/aws-iam": "^1.117.0",
-    "@aws-cdk/aws-lambda": "^1.117.0",
-    "@aws-cdk/aws-logs": "^1.117.0",
-    "@aws-cdk/core": "^1.117.0"
+    "@aws-cdk/aws-ecr-assets": "^1.118.0",
+    "@aws-cdk/aws-ecs": "^1.118.0",
+    "@aws-cdk/aws-iam": "^1.118.0",
+    "@aws-cdk/aws-lambda": "^1.118.0",
+    "@aws-cdk/aws-logs": "^1.118.0",
+    "@aws-cdk/core": "^1.118.0"
   },
   "bundledDependencies": [],
   "keywords": [
