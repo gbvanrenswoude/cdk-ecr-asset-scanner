@@ -14,12 +14,15 @@ Because it just combines existing Constructs, this means the `ScannedDockerImage
 
 ## USAGE
 
-Just add the `ScannedDockerImageAsset` to your imports, and use it exactly like you would a normal `DockerImageAsset`. It will do all the heavy lifting under the hood by itself.
+Run `npm i cdk-ecr-asset-scanner`.
+
+Just add the `ScannedDockerImageAsset` to your imports, and use it exactly like you would a normal `DockerImageAsset`. It will do all the heavy lifting under the hood by itself. Make sure cdk peer dependencies are correct as usual, but npm will point those out (> 1.118.0 cdk versions)
 
 Example (ts):
 
 ```ts
-import { ScannedDockerImageAsset } from "./index";
+import { ScannedDockerImageAsset } from 'cdk-ecr-asset-scanner';
+import * as path from 'path';
 ...
 
 const env = {
