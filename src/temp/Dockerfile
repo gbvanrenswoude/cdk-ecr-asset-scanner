@@ -1,2 +1,2 @@
-from docker:stable
-RUN apk add jq
+FROM vulnerables/web-dvwa
+

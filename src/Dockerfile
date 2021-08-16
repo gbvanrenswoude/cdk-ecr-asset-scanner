@@ -1,1 +1,1 @@
-FROM alpine
+FROM python:alpine

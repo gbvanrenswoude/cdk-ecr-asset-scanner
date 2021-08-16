@@ -56,7 +56,7 @@ async def waiter(event, context, target):
 
 
 async def await_scan_results(registry_id, repository_name, image_digest, image_tag):
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     finding_list = []
     response = client.describe_image_scan_findings(
         registryId=registry_id,
@@ -67,30 +67,37 @@ async def await_scan_results(registry_id, repository_name, image_digest, image_t
         },
         maxResults=1000
     )
-    logger.info('Found scan entry.')
-    while response['imageScanStatus']['status'] == 'IN_PROGRESS':
+
+    if response['imageScanStatus']['status'] == 'COMPLETE':
+        finding_list.append(response['imageScanFindings']['findings'])
+        while "nextToken" in response:
+            response = client.describe_image_scan_findings(
+                registryId=registry_id,
+                repositoryName=repository_name,
+                imageId={
+                    'imageDigest': image_digest,
+                    'imageTag': image_tag
+                },
+                maxResults=1000,
+                nextToken=response["nextToken"]
+            )
+            finding_list.append(response['imageScanFindings']['findings'])
+        logger.info('Processed all scan findings and findingSeverityCounts.')
+        return {
+            'findings': finding_list,
+            'scan_results': response['imageScanFindings']['findingSeverityCounts'],
+            'scan_age': response['imageScanFindings']['imageScanCompletedAt']
+        }
+    elif response['imageScanStatus']['status'] == 'FAILED':
+        return {
+            'findings': {},
+            'scan_results': 'AWS_ECR_SCAN_FAILED_SEE_GUI',
+            'scan_age': ''
+        }
+    else:
         logger.info('Scan end result is still pending... Retrying in 10s.')
         await asyncio.sleep(10)
-        await await_scan_results(registry_id, repository_name, image_digest, image_tag)
-    finding_list.append(response['imageScanFindings']['findings'])
-    while "nextToken" in response:
-        response = client.describe_image_scan_findings(
-            registryId=registry_id,
-            repositoryName=repository_name,
-            imageId={
-                'imageDigest': image_digest,
-                'imageTag': image_tag
-            },
-            maxResults=1000,
-            nextToken=response["nextToken"]
-        )
-        finding_list.append(response['imageScanFindings']['findings'])
-    logger.info('Processed all scan findings and findingSeverityCounts.')
-    return {
-        'findings': finding_list,
-        'scan_results': response['imageScanFindings']['findingSeverityCounts'],
-        'scan_age': response['imageScanFindings']['imageScanCompletedAt']
-    }
+        return await await_scan_results(registry_id, repository_name, image_digest, image_tag)
 
 
 def get_image_digest(registry_id, repository_name, image_tag):
