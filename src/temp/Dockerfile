@@ -1,2 +1,2 @@
-FROM vulnerables/web-dvwa
+FROM websphere-liberty
 

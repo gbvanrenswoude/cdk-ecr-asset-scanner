@@ -1,1 +1,1 @@
-FROM python:alpine
+FROM golang
