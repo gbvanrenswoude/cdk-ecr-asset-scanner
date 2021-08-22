@@ -1,12 +1,12 @@
-import * as path from 'path';
+import * as path from "path";
 import {
   DockerImageAsset,
   DockerImageAssetProps,
-} from '@aws-cdk/aws-ecr-assets';
-import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as logs from '@aws-cdk/aws-logs';
-import * as cdk from '@aws-cdk/core';
+} from "@aws-cdk/aws-ecr-assets";
+import * as iam from "@aws-cdk/aws-iam";
+import * as lambda from "@aws-cdk/aws-lambda";
+import * as logs from "@aws-cdk/aws-logs";
+import * as cdk from "@aws-cdk/core";
 
 export class ScannedDockerImageAsset extends DockerImageAsset {
   public readonly scanFunction: lambda.SingletonFunction;
@@ -24,22 +24,22 @@ export class ScannedDockerImageAsset extends DockerImageAsset {
     // const uniqueid = 'GloballyUniqueIdForSingleton'; // For example, a UUID from `uuidgen`
     // return stack.node.tryFindChild(uniqueid) as sns.Topic  ?? new sns.Topic(stack, uniqueid);
     //}
-    this.scanFunction = new lambda.SingletonFunction(this, 'scanFunction', {
-      uuid: 'staticuuidforscanningdockerimageassets2e92278ruwu0qu209u',
+    this.scanFunction = new lambda.SingletonFunction(this, "scanFunction", {
+      uuid: "staticuuidforscanningdockerimageassets2e92278ruwu0qu209u",
       runtime: lambda.Runtime.PYTHON_3_8,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../function')),
-      handler: 'scan_handler.main',
+      code: lambda.Code.fromAsset(path.join(__dirname, "../function")),
+      handler: "scan_handler.main",
       logRetention: logs.RetentionDays.ONE_DAY,
-      timeout: cdk.Duration.seconds(890),
+      timeout: cdk.Duration.seconds(300),
     });
     this.scanFunction.addToRolePolicy(
       new iam.PolicyStatement({
-        actions: ['ecr:*', 'logs:*'],
-        resources: ['*'],
-      }),
+        actions: ["ecr:*", "logs:*"],
+        resources: ["*"],
+      })
     );
 
-    this.scanCRHandler = new cdk.CustomResource(this, 'scanCR', {
+    this.scanCRHandler = new cdk.CustomResource(this, "scanCR", {
       serviceToken: this.scanFunction.functionArn,
       properties: {
         target: this.imageUri,
@@ -51,7 +51,7 @@ export class ScannedDockerImageAsset extends DockerImageAsset {
     // The scanCRHandler receives the scanresult from the Lambda function via a pre-signed URL.
     // In the Data property of the response object the scan result is written as a string using the key 'report'.
     new cdk.CfnOutput(this, `scanResultOutput-${id}`, {
-      value: this.scanCRHandler.getAtt('report').toString(),
+      value: this.scanCRHandler.getAtt("report").toString(),
     });
   }
 }

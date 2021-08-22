@@ -46,7 +46,7 @@ def send(event, context, responseStatus, responseData, physicalResourceId='stati
 
 async def waiter(event, context, target):
     logger.info('Running Lambda function timeout safeguard')
-    await asyncio.sleep(870)
+    await asyncio.sleep(295)
     logger.info(
         'Lambda function timeout safeguard triggered, returning SUCCESS with "pass - check later" and ending function.')
     send(event, context, 'SUCCESS', {
@@ -56,7 +56,8 @@ async def waiter(event, context, target):
 
 
 async def await_scan_results(registry_id, repository_name, image_digest, image_tag):
-    await asyncio.sleep(1)
+    # Give AWS 10s time to process the scan result
+    await asyncio.sleep(10)
     finding_list = []
     response = client.describe_image_scan_findings(
         registryId=registry_id,
