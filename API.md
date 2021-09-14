@@ -4,7 +4,7 @@
 
 ### ScannedDockerImageAsset <a name="cdk-ecr-asset-scanner.ScannedDockerImageAsset"></a>
 
-#### Initializer <a name="cdk-ecr-asset-scanner.ScannedDockerImageAsset.Initializer"></a>
+#### Initializers <a name="cdk-ecr-asset-scanner.ScannedDockerImageAsset.Initializer"></a>
 
 ```typescript
 import { ScannedDockerImageAsset } from 'cdk-ecr-asset-scanner'
@@ -36,11 +36,19 @@ new ScannedDockerImageAsset(scope: Construct, id: string, props: DockerImageAsse
 
 ##### `scanCRHandler`<sup>Required</sup> <a name="cdk-ecr-asset-scanner.ScannedDockerImageAsset.property.scanCRHandler"></a>
 
+```typescript
+public readonly scanCRHandler: CustomResource;
+```
+
 - *Type:* [`@aws-cdk/core.CustomResource`](#@aws-cdk/core.CustomResource)
 
 ---
 
 ##### `scanFunction`<sup>Required</sup> <a name="cdk-ecr-asset-scanner.ScannedDockerImageAsset.property.scanFunction"></a>
+
+```typescript
+public readonly scanFunction: SingletonFunction;
+```
 
 - *Type:* [`@aws-cdk/aws-lambda.SingletonFunction`](#@aws-cdk/aws-lambda.SingletonFunction)
 
