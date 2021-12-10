@@ -3,6 +3,7 @@ const project = new AwsCdkConstructLibrary({
   author: 'Gijsbert van Renswoude',
   authorAddress: 'gbvanrenswoude@gmail.com',
   cdkVersion: '1.118.0',
+  minNodeVersion: "12.7.0",
   defaultReleaseBranch: 'main',
   name: 'cdk-ecr-asset-scanner',
   repositoryUrl: 'https://github.com/gbvanrenswoude/cdk-ecr-asset-scanner.git',
