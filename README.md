@@ -1,3 +1,5 @@
+# Unmaintained, this does not work with the new asset naming convention used in cdkv2. Maybe I'll update it one day. Enhanced ECR scanning kind of replaces this (as released by AWS)
+
 # CDK ECR Asset Scanner
 
 The CDK ECR Asset Scanner is a custom L3 `ScannedDockerImageAsset` construct that builds and uploads your container image assets to ECR. After pushing, it will return the vulnerability report status in a Stack Output. In that way, it gives crucial and important security related information directly back to the engineer working with the stack. It aims to improve security insight while working with AWS CDK.
